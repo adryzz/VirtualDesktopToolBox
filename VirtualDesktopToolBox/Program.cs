@@ -14,6 +14,9 @@ namespace VirtualDesktopToolBox
         public static ContextMenuStrip IconMenu;
         public static ToolStripMenuItem Pinitem;
         public static ToolStripMenuItem UnpinItem;
+        public static ToolStripMenuItem ExtraItem;
+        public static ToolStripMenuItem ExitItem;
+        public static ExtraItemsWindow Window;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -32,6 +35,12 @@ namespace VirtualDesktopToolBox
             UnpinItem = new ToolStripMenuItem("Unpin window");
             UnpinItem.Click += UnpinItem_Click;
             IconMenu.Items.Add(UnpinItem);
+            ExtraItem = new ToolStripMenuItem("Extra tools");
+            ExtraItem.Click += ExtraItem_Click;
+            IconMenu.Items.Add(ExtraItem);
+            ExitItem = new ToolStripMenuItem("Exit");
+            ExitItem.Click += ExitItem_Click;
+            IconMenu.Items.Add(ExitItem);
             Icon.ContextMenuStrip = IconMenu;
             Icon.Visible = true;
             Application.Run();
@@ -84,6 +93,33 @@ namespace VirtualDesktopToolBox
                 {
                     Icon.ShowBalloonTip(2000, "VirtualDesktopToolBox", "The selected window is invalid.", ToolTipIcon.Error);
                 }
+            }
+        }
+
+        private static void ExtraItem_Click(object sender, EventArgs e)
+        {
+            if (Window == null)
+            {
+                Window = new ExtraItemsWindow();
+                Window.Show();
+            }
+            else if (Window.IsDisposed)
+            {
+                Window = new ExtraItemsWindow();
+                Window.Show();
+            }
+            else if (Window.Visible)
+            {
+                Window.Focus();
+            }
+        }
+
+        private static void ExitItem_Click(object sender, EventArgs e)
+        {
+            var res = MessageBox.Show("Do you really wanna exit?", "VirtualDesktopToolBox", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (res == DialogResult.Yes)
+            {
+                Application.Exit();
             }
         }
 
